@@ -1,0 +1,36 @@
+type Error = variant { NotFound : record { msg : text } };
+type Result = variant { Ok : WaterConservationTip; Err : Error };
+type Result_1 = variant { Ok : WaterCondition; Err : Error };
+type Result_2 = variant { Ok : WaterUsage; Err : Error };
+type Result_3 = variant { Ok; Err : Error };
+type WaterCondition = record {
+  id : nat64;
+  timestamp : nat64;
+  water_level : float64;
+  location : text;
+};
+type WaterConditionPayload = record { water_level : float64; location : text };
+type WaterConservationTip = record { id : nat64; tip_text : text };
+type WaterConservationTipPayload = record { tip_text : text };
+type WaterUsage = record {
+  id : nat64;
+  gallons_used : float64;
+  timestamp : nat64;
+};
+type WaterUsagePayload = record { gallons_used : float64 };
+service : {
+  add_conservation_tip : (WaterConservationTipPayload) -> (
+      opt WaterConservationTip,
+    );
+  add_water_condition : (WaterConditionPayload) -> (opt WaterCondition);
+  add_water_usage : (WaterUsagePayload) -> (opt WaterUsage);
+  delete_conservation_tip : (nat64) -> (Result);
+  delete_water_condition : (nat64) -> (Result_1);
+  delete_water_usage : (nat64) -> (Result_2);
+  get_conservation_tip : (nat64) -> (Result) query;
+  get_water_condition : (nat64) -> (Result_1) query;
+  get_water_usage : (nat64) -> (Result_2) query;
+  update_conservation_tip : (nat64, WaterConservationTipPayload) -> (Result);
+  update_water_condition : (nat64, WaterConditionPayload) -> (Result_3);
+  update_water_usage : (nat64, WaterUsagePayload) -> (Result_2);
+}
